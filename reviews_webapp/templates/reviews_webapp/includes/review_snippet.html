@@ -1,0 +1,34 @@
+<div class='box post_box'>
+    
+    <div>
+        <p class="post_timecreated" style="float:left;">
+            {% if post.user == user %}
+                Vous avez publié une critique
+            {% else %}
+                {{ post.user }} a publié une critique
+            {% endif %}
+        </p>
+        <p class="post_timecreated" style="float:right;">{{ post.time_created }}</p>
+    </div>
+
+    <h3 class="headline">{{ post.headline }} - 
+        {% for item in "012345" %}
+            {% if forloop.counter <= post.rating %}
+                <i class="fa fa-star"></i>
+            {% endif %}
+        {% endfor %}
+    </h3>
+       
+    <p style="text-align: left;">{{ post.body|safe }}</p>
+
+    {% include 'reviews_webapp/includes/ticket_snippet.html' with post=post.ticket editable=False %}
+
+    {% if editable %}
+        <form method="post">
+            {% csrf_token %}
+            {{ deletereview_form }}
+            <button><a href="{% url 'review' ticket_id=post.ticket.id %}">Modifier</a></button>
+            <button type="submit" name="review_id" value="{{ post.id }}" onclick="return confirm('Supprimer cette critique ?')">Supprimer</button>
+        </form>
+    {% endif %}
+</div>

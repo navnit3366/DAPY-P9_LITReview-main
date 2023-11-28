@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if ticket %}
+    {% if ticket.user != request.user and not review_form %}
+        {% include 'reviews_webapp/includes/ticket_snippet.html' with post=ticket %}
+    {% elif review_form %}
+        <div class="box post_box">
+            Vous êtes en train de poster en réponse à
+            {% include 'reviews_webapp/includes/ticket_snippet.html' with post=ticket %}
+            <hr>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% include 'reviews_webapp/includes/new_review_snippet.html' %}
+                <input type="submit">
+            </form>            
+        </div>
+    {% endif %}
+{% else %}
+    <h1>Créer un ticket</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="box post_box">
+            {% if ticket_form.errors %}
+                {{ ticket_form.errors }}
+            {% endif %}
+            
+            {% csrf_token %}
+            {{ ticket_form.as_p }}
+        
+            {% if review_form %}
+            </div>
+            <h1>... et sa critique !</h1>
+            <div class="box post_box">
+                {% include 'reviews_webapp/includes/new_review_snippet.html' %}
+            {% endif %}
+            <input type="submit">
+        </div>
+    </form>
+{% endif %}
+
+{% endblock content %}

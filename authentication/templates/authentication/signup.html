@@ -1,0 +1,26 @@
+<title>Inscription</title>
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="inside_container">
+    <div class="box post_box">
+        <h2>Inscrivez-vous</h2>
+        {% if form.errors %}
+            {{ form.errors }}
+        {% endif %}
+        <form method="post">
+            <!-- {{ form.as_p }} -->
+            {% for key in form %}
+                <p>{{ key.label }} : {{ key }}
+                {% if key.name == "password1" %}
+                    <br>(Au moins 8 charactères alphanumériques)
+                {% endif %}
+                </p>
+            {% endfor %}
+            {% csrf_token %}
+            <button onclick="window.location.href='/'">Retourner</button>
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
